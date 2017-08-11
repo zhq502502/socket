@@ -1,5 +1,9 @@
 package common;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -30,9 +34,26 @@ public class CommonTest {
 	}
 	
 	@Test
-	public void 获取网络信息() throws MalformedURLException{
+	public void 获取网络信息() throws IOException{
 		URL xcz = new URL("http://www.x-cz.cn");
 		URL url = new URL(xcz, "/#page2");
+		System.out.println(url.getHost());
+		System.out.println(url.getProtocol());
+		System.out.println(url.getDefaultPort());
+		System.out.println(url.getQuery());
+		System.out.println(url.getRef());
+		System.out.println(url.getUserInfo());
+		System.out.println(url.getPath());
+		InputStream input = url.openStream();
+		InputStreamReader reader = new InputStreamReader(input,"UTF-8");
+		BufferedReader br = new BufferedReader(reader);
+		StringBuffer sb = new StringBuffer();
+		String data = br.readLine();
+		while (data!=null) {
+			sb.append(data+"\n");
+			data = br.readLine();
+		}
+		System.out.println(sb.toString());
 	}
 	
 }
