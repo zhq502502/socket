@@ -13,8 +13,8 @@ public class TcpClient {
 	public TcpClient() throws UnknownHostException, IOException{
 		System.out.println("客户端："+Math.random());
 		Socket client = new Socket("127.0.0.1", 21000);
-		OutputStream out = client.getOutputStream();
-		InputStream input = client.getInputStream();
+		OutputStream out = client.getOutputStream();//客户端发给服务器的
+		InputStream input = client.getInputStream();//服务器发给客户端的
 		
 		PrintWriter pw = new PrintWriter(out);
 		BufferedReader br = new BufferedReader(new InputStreamReader(input,"UTF-8"));
