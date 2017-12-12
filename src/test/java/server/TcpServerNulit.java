@@ -14,6 +14,7 @@ public class TcpServerNulit {
 	public TcpServerNulit() throws IOException{
 		ServerSocket server = new ServerSocket(21000);
 		for(;;){
+			System.out.println("等待用户接入");
 			Socket socket = server.accept();
 			new SigleServer(socket).start();
 			System.out.println("新用户连接，在线用户数："+getOnline());
@@ -74,6 +75,7 @@ class SigleServer extends Thread{
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			TcpServerNulit.unonline();
 		}
 	}
 }
