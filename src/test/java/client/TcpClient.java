@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 public class TcpClient {
 	public TcpClient() throws UnknownHostException, IOException{
 		System.out.println("客户端："+Math.random());
-		Socket client = new Socket("127.0.0.1", 21000);
+		Socket client = new Socket("127.0.0.1", 1013);
 		OutputStream out = client.getOutputStream();//客户端发给服务器的
 		InputStream input = client.getInputStream();//服务器发给客户端的
 		

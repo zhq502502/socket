@@ -12,7 +12,7 @@ import java.net.Socket;
 public class TcpServerNulit {
 	private static int onlienUser = 0;
 	public TcpServerNulit() throws IOException{
-		ServerSocket server = new ServerSocket(21000);
+		ServerSocket server = new ServerSocket(1013);
 		for(;;){
 			Socket socket = server.accept();
 			new SigleServer(socket).start();
