@@ -27,6 +27,8 @@ public class TestClient extends Thread{
 		}
 		getInput();//持续获取用户输入
 	}
+	//{"a":"123","un":"123123123123123123"}
+	//{"a":"1","un":"1234"}
 	private class InputThread extends Thread{
 		public void run(){
 			try {

@@ -96,6 +96,7 @@ public class MainServer{
 	 * @param user
 	 */
 	public void addUser(String id,UserServer user){
+		LogUtil.log("加入新用户:"+id);
 		UserServer u = mapUser.get(id);
 		mapUser.put(id, user);
 		if(u!=null){
