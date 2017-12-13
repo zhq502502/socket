@@ -16,8 +16,14 @@ public class MainServer{
 	private int countOnlineUser = 0;
 	/**自己实例*/
 	private static MainServer mainServer=null;
+	/**用户列表*/
 	private List<String> listUser = new ArrayList<String>();
+	/**用户列表*/
 	private Map<String, UserServer> mapUser = new HashMap<String, UserServer>(); 
+	/**GM用户列表*/
+	private List<String> gmListUser = new ArrayList<String>();
+	/**GM用户列表*/
+	private Map<String, UserServer> gmMapUser = new HashMap<String, UserServer>(); 
 	/**
 	 * 私有构造方法
 	 */

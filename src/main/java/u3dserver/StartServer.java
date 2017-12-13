@@ -20,6 +20,7 @@ public class StartServer extends Thread{
 				LogUtil.log("等待连接");
 				socket = server.accept();
 				new UserServer(socket).start();
+				MainServer.instance().online();
 				System.out.println("新用户连接，在线用户数："+MainServer.instance().getOnline());
 			} catch (IOException e) {
 				e.printStackTrace();
