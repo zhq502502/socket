@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import util.Constants;
 import util.LogUtil;
@@ -17,9 +18,10 @@ public class UserServer extends Thread{
 	OutputStream out;
 	PrintWriter pw;
 	private Socket socket = null;
+	private String userid = null;
 	public UserServer(Socket socket){
 		try{
-			this.socket = socket;
+			this.socket = socket;			
 			input = socket.getInputStream();
 			reader = new BufferedReader(new InputStreamReader(input, "UTF-8"));
 			//输出流
@@ -47,9 +49,18 @@ public class UserServer extends Thread{
 					socket.close();
 					MainServer.instance().unonline();
 					return;
-				}else{
+				}else{					
 					this.readData(data);
-					data = reader.readLine();
+					if(socket.isClosed()){
+						data=null;
+						MainServer.instance().unonline();
+						if(this.userid!=null){							
+							MainServer.instance().deleteUser(this.userid);
+							LogUtil.log("用户下线："+this.userid);
+						}
+					}else{						
+						data = reader.readLine();
+					}
 				}
 			}
 		}
@@ -71,42 +82,46 @@ public class UserServer extends Thread{
 	private void readData(String data){
 		//sendMsg(data);
 		JSONObject obj = null;
+		JSONArray array = null;
 		try{
-			obj = JSONObject.fromObject(data);
+			if(data.startsWith("{")){
+				obj = JSONObject.fromObject(data);
+			}else if(data.startsWith("[")){
+				array = JSONArray.fromObject(data);
+			}
 		}catch(Exception e){
-			LogUtil.log("收到数据非json");;
+			LogUtil.log("收到数据非json"+data);
 			//e.printStackTrace();
 			return;
 		}
-		Object a = obj.get("a");
-		if(a!=null){
-			try{
-				//{"a":"123","un":"123123123123123123"}
-				//{"a":"1","un":"1234"}
-				int active = Integer.parseInt(a.toString());
-				switch (active) {
-					case Constants.AVTIVE_TYPE.CONNECT:{
-						String username = obj.getString("un");
-						MainServer.instance().addUser(username, this);
-					}break;
-					case Constants.AVTIVE_TYPE.CREATE_OBJ:{
-						
-					}break;
-					case Constants.AVTIVE_TYPE.CREATE_USER:{
-						
-					}break;
-					default:{
-						MainServer.instance().sendData2All(data);
-					}break;
+		if(obj!=null){
+			Object a = obj.get("a");
+			if(a!=null){
+				try{
+					//{"a":"123","un":"123123123123123123"}
+					//{"a":"1","un":"1234"}
+					int active = Integer.parseInt(a.toString());
+					switch (active) {
+						case Constants.AVTIVE_TYPE.CONNECT:{
+							String username = obj.getString("un");
+							MainServer.instance().addUser(username, this);
+							this.userid = username;
+						}break;
+						default:{
+							MainServer.instance().sendData2All(data);
+						}break;
+					}
+				}catch(Exception e){
+					LogUtil.log("json解析错误"+obj.toString());
+					//e.printStackTrace();
+					return;
 				}
-			}catch(Exception e){
-				LogUtil.log("json解析错误"+obj.toString());
-				//e.printStackTrace();
-				return;
 			}
-			
-			
 		}
+		if(array!=null){
+			MainServer.instance().sendData2All(data);
+		}
+		
 		//向所有客户端发出
 	}
 }
