@@ -67,6 +67,7 @@ public class UserServer extends Thread{
 		catch (Exception e) {
 			e.printStackTrace();
 			MainServer.instance().unonline();
+			MainServer.instance().deleteUser(this.userid);
 		}
 		
 	}
